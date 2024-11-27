@@ -12,14 +12,16 @@ import { PrivacyPage } from './pages/PrivacyPage';
 import { SupportPage } from './pages/SupportPage';
 import { RedeemPage } from './pages/RedeemPage';
 import { SignUpPage } from './pages/SignUpPage';
-// import { BusinessRequirementsPage } from './pages/BusinessRequirementsPage';
 import { LoginPage } from './pages/LoginPage';
 import { AdminPage } from './pages/AdminPage';
+import { ServerErrorPage } from './pages/ServerErrorPage';
+import { MaintenancePage } from './pages/MaintenancePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { PageBanner } from './components/PageBanner';
 import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
 import { SellerSignupPage } from './pages/admin/templates/SellerSignupPage';
 import { NewLoginPage } from './pages/admin/templates/NewLoginPage';
+import { AgeVerificationDialog } from './components/AgeVerificationDialog';
 
 // Domain redirect component
 const DomainRedirect = () => {
@@ -38,6 +40,19 @@ const DomainRedirect = () => {
 
 function App() {
   const [showBanner, setShowBanner] = useState(true);
+  const [showAgeVerification, setShowAgeVerification] = useState(false);
+
+  useEffect(() => {
+    // Check if age verification cookie exists
+    const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
+    if (!isVerified) {
+      setShowAgeVerification(true);
+    }
+  }, []);
+
+  const handleAgeVerified = () => {
+    setShowAgeVerification(false);
+  };
 
   return (
     <Router>
@@ -56,6 +71,8 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/server-error" element={<ServerErrorPage />} />
+          <Route path="/maintenance" element={<MaintenancePage />} />
           <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
           <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
           <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
@@ -63,6 +80,7 @@ function App() {
         </Routes>
         <Footer />
         {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
+        {showAgeVerification && <AgeVerificationDialog onVerified={handleAgeVerified} />}
         <Toaster 
           position="top-right"
           toastOptions={{
