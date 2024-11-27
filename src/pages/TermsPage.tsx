@@ -53,7 +53,7 @@ const sections = [
   {
     title: "5. CONTACT INFORMATION",
     content: [
-      "Questions about the Terms of Service should be sent to us at help.shopblox@gmail.com."
+      "Questions about the Terms of Service should be sent to us at support-en@shopblox.gg."
     ]
   }
 ];
