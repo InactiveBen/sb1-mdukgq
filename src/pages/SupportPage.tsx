@@ -1,8 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, ExternalLink } from 'lucide-react';
+import { MessageCircle, ExternalLink, Shield } from 'lucide-react';
+import { sanitizeURL } from '../utils/sanitize';
 
 export const SupportPage: React.FC = () => {
+  const discordUrl = sanitizeURL('https://discord.gg/tdvCm2rXTN');
+  const trustpilotUrl = sanitizeURL('https://www.trustpilot.com/review/shopblox.gg');
+
   return (
     <div className="w-full h-full min-h-screen flex flex-col py-24">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,17 +16,17 @@ export const SupportPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center space-y-6"
         >
+          <Shield className="w-12 h-12 text-red-500 mx-auto" />
           <h1 className="text-3xl font-bold text-white">Need Help? We're Here For You</h1>
           
           <p className="text-neutral-300 max-w-2xl mx-auto">
-            Our support team is available 24/7 to assist you with any questions or concerns. 
-            Whether you need help with a purchase, have questions about a product, or just want to learn more about ShopBlox, 
-            we're here to help.
+            Our support team is available to assist you with any questions or concerns. 
+            For your security, we only provide support through our official Discord server.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
             <a
-              href="https://discord.gg/tdvCm2rXTN"
+              href={discordUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90 transition-all"
@@ -35,9 +39,9 @@ export const SupportPage: React.FC = () => {
 
           <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div className="bg-neutral-800/50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-white mb-2">Quick Response Time</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Secure Support</h3>
               <p className="text-neutral-300">
-                Get answers to your questions quickly. Our average response time is under 5 minutes.
+                All support is handled through our official Discord server for enhanced security and verification.
               </p>
             </div>
 
@@ -49,32 +53,32 @@ export const SupportPage: React.FC = () => {
             </div>
 
             <div className="bg-neutral-800/50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-white mb-2">Community Support</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Verified Support</h3>
               <p className="text-neutral-300">
-                Join our Discord community to connect with other users and get help from our team.
+                Only trust support from verified staff members with official roles in our Discord server.
               </p>
             </div>
           </div>
 
           <div className="mt-16 bg-neutral-800/30 p-8 rounded-lg">
-            <h2 className="text-xl font-bold text-white mb-4">Common Questions</h2>
+            <h2 className="text-xl font-bold text-white mb-4">Security Notice</h2>
             <div className="space-y-6 text-left">
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">How do I receive my code?</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">Official Support Channels</h3>
                 <p className="text-neutral-300">
-                  After purchase, your code will be sent to the email address you provided during checkout within 5-10 minutes.
+                  We only provide support through our official Discord server. Never share sensitive information through other channels.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">What if I don't receive my code?</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">Verify Staff Members</h3>
                 <p className="text-neutral-300">
-                  First, check your spam/junk folder. If you still can't find it, contact our support team on Discord and we'll help you right away.
+                  Always verify staff member roles in our Discord server. Never trust direct messages from unverified users.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Do you offer refunds?</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">Protect Your Information</h3>
                 <p className="text-neutral-300">
-                  Due to the digital nature of our products, we do not offer refunds once a code has been delivered. Please make sure to review your purchase carefully.
+                  Never share your password or sensitive information. Our staff will never ask for this information.
                 </p>
               </div>
             </div>
