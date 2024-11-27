@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink, TestTubes } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { products } from '../data/products';
 
 export const ProductPage: React.FC = () => {
@@ -28,12 +28,6 @@ export const ProductPage: React.FC = () => {
       window.open(url.toString(), '_blank');
       setShowEmailPrompt(false);
       setEmail('');
-    }
-  };
-
-  const handleTestGame = () => {
-    if (product.testLink) {
-      window.open(product.testLink, '_blank');
     }
   };
 
@@ -117,18 +111,6 @@ export const ProductPage: React.FC = () => {
             >
               Buy Now
             </button>
-
-            {product.testLink && (
-              <button
-                onClick={handleTestGame}
-                className="w-full h-fit text-center ease-in-out duration-500 transition rounded-lg border border-blue-500 bg-blue-500/40 shadow-[inset_0_0_12px_#3b82f6a5] px-4 py-2 text-sm tracking-tighter font-semibold text-white hover:brightness-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <TestTubes className="w-4 h-4" />
-                  Test Item
-                </div>
-              </button>
-            )}
 
             <span className="text-xs text-center text-neutral-300">
               By using ShopBlox and making a purchase, you agree to our{' '}
