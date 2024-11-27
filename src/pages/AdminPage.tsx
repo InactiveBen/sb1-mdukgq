@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { PageBackground } from '../components/shared/PageBackground';
-useEffect(() => {
-  toast.error('Authentication Required', {
-    description: 'Please log in to access this feature.',
-    duration: 5000,
-  });
-}, []);
-
 
 export const AdminPage: React.FC = () => {
+  useEffect(() => {
+    toast.error(
+      'Authentication Required',
+      {
+        description: 'Please sign in to access the admin panel.',
+        duration: 535000,
+      }
+    );
+  }, []);
+
   return (
     <div className="relative isolate">
       <PageBackground />
@@ -24,7 +27,6 @@ export const AdminPage: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="text-center space-y-6"
           >
-        
 
             <div className="pt-4">
               <Link
@@ -37,7 +39,7 @@ export const AdminPage: React.FC = () => {
             </div>
 
             <div className="text-sm text-neutral-400">
-            </div>
+If you require a password reset, please <a href="/support" className="text-red-500 hover:text-red-400">contact your site mgr</a> for assistance.</div>
           </motion.div>
         </div>
       </div>
