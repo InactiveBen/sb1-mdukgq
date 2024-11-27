@@ -52,7 +52,7 @@ body {
 
 /* Custom checkbox styles */
 input[type="checkbox"] {
-  @apply appearance-none h-4 w-4 rounded border border-neutral-800 bg-neutral-950 checked:bg-red-500/40 checked:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-neutral-900 transition-all duration-200 cursor-pointer shadow-[inset_0_0_12px_#ef4444a5];
+  @apply appearance-none h-5 w-5 rounded-md border border-neutral-800 bg-neutral-950 checked:bg-red-500/40 checked:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-neutral-900 transition-all duration-200 cursor-pointer shadow-[inset_0_0_12px_#ef4444a5];
 }
 
 input[type="checkbox"]:checked {
@@ -65,4 +65,41 @@ input[type="checkbox"]:checked {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #171717;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border: 2px solid #171717;
+  border-radius: 100vh;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #262626 #171717;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
