@@ -1,0 +1,16 @@
+{
+  "name": "ShopBlox",
+  "short_name": "ShopBlox",
+  "description": "Purchase Roblox Toy Codes Quickly and Safely",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#171717",
+  "theme_color": "#ef4444",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
