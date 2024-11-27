@@ -158,8 +158,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
             type="submit"
             className="w-full h-fit text-center ease-in-out duration-500 transition rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-4 py-2 text-sm tracking-tighter font-semibold text-white hover:brightness-90"
           >
-            Verify Age
-          </button>
+Continue to ShopBlox         </button>
         </form>
       </motion.div>
     </div>
