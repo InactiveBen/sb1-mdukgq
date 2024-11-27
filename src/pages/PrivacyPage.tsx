@@ -88,7 +88,7 @@ const sections = [
   {
     title: "10. Contact Us",
     content: [
-      "If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at help.shopblox@gmail.com."
+      "If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at support-en@shopblox.gg."
     ]
   }
 ];
