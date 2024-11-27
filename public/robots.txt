@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://shopblox.codes/sitemap.xml
+
+# Disallow admin and sensitive pages
+Disallow: /admin/
+Disallow: /success
+Disallow: /banned
+Disallow: /server-error
+Disallow: /maintenance
+
+# Crawl-delay
+Crawl-delay: 10
