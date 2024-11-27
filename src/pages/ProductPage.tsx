@@ -1,19 +1,49 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ShoppingBag, AlertCircle } from 'lucide-react';
 import { products } from '../data/products';
+import { PageBackground } from '../components/shared/PageBackground';
 
 export const ProductPage: React.FC = () => {
   const { productId } = useParams();
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
 
   const product = products.find(p => p.id === productId);
 
   if (!product) {
-    return navigate('/404');
+    return (
+      <div className="relative isolate">
+        <PageBackground />
+        <div className="w-full h-full min-h-screen flex items-center justify-center py-24">
+          <motion.div 
+            className="max-w-md w-full text-center space-y-6 px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
+            <h1 className="text-3xl font-bold text-white">Product Not Found</h1>
+            
+            <p className="text-neutral-300">
+              This product may have been sold or the link you followed might be broken.
+              Please check our shop for available products.
+            </p>
+
+            <div className="pt-4">
+              <Link
+                to="/shop"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                Browse Shop
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
   }
 
   const handleBuyNow = () => {
