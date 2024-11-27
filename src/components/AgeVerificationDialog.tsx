@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, Info } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CustomDropdown } from './shared/CustomDropdown';
 
 interface AgeVerificationDialogProps {
   onVerified: () => void;
@@ -33,20 +34,29 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
     }
 
     if (age >= 13) {
-      // Set cookie that expires in 30 days
       document.cookie = "age_verified=true; max-age=2592000; path=/";
       onVerified();
     } else {
-      // Set banned cookie that expires in 30 days
       document.cookie = "age_failed_check=true; max-age=2592000; path=/";
       navigate('/banned');
     }
   };
 
-  const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const months = Array.from({ length: 12 }, (_, i) => ({
+    value: String(i + 1),
+    label: String(i + 1)
+  }));
+
+  const days = Array.from({ length: 31 }, (_, i) => ({
+    value: String(i + 1),
+    label: String(i + 1)
+  }));
+
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+  const years = Array.from({ length: 100 }, (_, i) => ({
+    value: String(currentYear - i),
+    label: String(currentYear - i)
+  }));
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -63,63 +73,33 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
         <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg mb-6">
           <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-blue-300">
-            We don't store your date of birth. Instead, we use a cookie to remember that you've confirmed your age.
+            We don't store your date of birth on our servers. Instead, we use a cookie to remember that you've confirmed your age.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="month" className="block text-sm font-medium text-neutral-300 mb-1">
-                Month
-              </label>
-              <select
-                id="month"
-                value={month}
-                onChange={(e) => setMonth(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white"
-              >
-                <option value="">Month</option>
-                {months.map(m => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="day" className="block text-sm font-medium text-neutral-300 mb-1">
-                Day
-              </label>
-              <select
-                id="day"
-                value={day}
-                onChange={(e) => setDay(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white"
-              >
-                <option value="">Day</option>
-                {days.map(d => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="year" className="block text-sm font-medium text-neutral-300 mb-1">
-                Year
-              </label>
-              <select
-                id="year"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white"
-              >
-                <option value="">Year</option>
-                {years.map(y => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-            </div>
+            <CustomDropdown
+              options={months}
+              value={month}
+              onChange={setMonth}
+              placeholder="Month"
+              label="Month"
+            />
+            <CustomDropdown
+              options={days}
+              value={day}
+              onChange={setDay}
+              placeholder="Day"
+              label="Day"
+            />
+            <CustomDropdown
+              options={years}
+              value={year}
+              onChange={setYear}
+              placeholder="Year"
+              label="Year"
+            />
           </div>
 
           <div className="flex items-start gap-3">
@@ -158,7 +138,8 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
             type="submit"
             className="w-full h-fit text-center ease-in-out duration-500 transition rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-4 py-2 text-sm tracking-tighter font-semibold text-white hover:brightness-90"
           >
-Continue to ShopBlox         </button>
+            Verify Age
+          </button>
         </form>
       </motion.div>
     </div>
