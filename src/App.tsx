@@ -42,13 +42,14 @@ const DomainRedirect = () => {
 // Age check component
 const AgeCheck = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   
   useEffect(() => {
     const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
-    if (isBanned) {
+    if (isBanned && location.pathname !== '/banned' && location.pathname !== '/support') {
       navigate('/banned');
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   return null;
 };
@@ -58,7 +59,6 @@ function App() {
   const [showAgeVerification, setShowAgeVerification] = useState(false);
 
   useEffect(() => {
-    // Check if age verification cookie exists
     const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
     const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
     if (!isVerified && !isBanned) {
@@ -98,7 +98,9 @@ function App() {
         </Routes>
         <Footer />
         {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
-        {showAgeVerification && <AgeVerificationDialog onVerified={handleAgeVerified} />}
+        {showAgeVerification && !document.cookie.includes('age_failed_check') && (
+          <AgeVerificationDialog onVerified={handleAgeVerified} />
+        )}
         <Toaster 
           position="top-right"
           toastOptions={{
