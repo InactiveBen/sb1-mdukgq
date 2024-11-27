@@ -10,15 +10,6 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    toast.error(
-      'Access Suspended',
-      {
-        description: 'Seller access is currently suspended as we migrate to using Stripe. All sellers have been paid out.',
-        duration: 5000,
-      }
-    );
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
