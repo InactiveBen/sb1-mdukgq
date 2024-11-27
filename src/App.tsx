@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -20,11 +20,27 @@ import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
 import { SellerSignupPage } from './pages/admin/templates/SellerSignupPage';
 import { NewLoginPage } from './pages/admin/templates/NewLoginPage';
 
+// Domain redirect component
+const DomainRedirect = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    if (hostname === 'shopblox.shop') {
+      window.location.href = `https://shopblox.gg${location.pathname}`;
+    }
+  }, [location]);
+
+  return null;
+};
+
 function App() {
   const [showBanner, setShowBanner] = useState(true);
 
   return (
     <Router>
+      <DomainRedirect />
       <div className="w-full h-full min-h-screen flex flex-col">
         <Header />
         <Routes>
