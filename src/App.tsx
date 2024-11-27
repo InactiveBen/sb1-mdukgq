@@ -16,6 +16,7 @@ import { LoginPage } from './pages/LoginPage';
 import { AdminPage } from './pages/AdminPage';
 import { ServerErrorPage } from './pages/ServerErrorPage';
 import { MaintenancePage } from './pages/MaintenancePage';
+import { BannedPage } from './pages/BannedPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { PageBanner } from './components/PageBanner';
 import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
@@ -38,6 +39,20 @@ const DomainRedirect = () => {
   return null;
 };
 
+// Age check component
+const AgeCheck = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
+    if (isBanned) {
+      navigate('/banned');
+    }
+  }, [navigate]);
+
+  return null;
+};
+
 function App() {
   const [showBanner, setShowBanner] = useState(true);
   const [showAgeVerification, setShowAgeVerification] = useState(false);
@@ -45,7 +60,8 @@ function App() {
   useEffect(() => {
     // Check if age verification cookie exists
     const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
-    if (!isVerified) {
+    const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
+    if (!isVerified && !isBanned) {
       setShowAgeVerification(true);
     }
   }, []);
@@ -57,6 +73,7 @@ function App() {
   return (
     <Router>
       <DomainRedirect />
+      <AgeCheck />
       <div className="w-full h-full min-h-screen flex flex-col">
         <Header />
         <Routes>
@@ -73,6 +90,7 @@ function App() {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/server-error" element={<ServerErrorPage />} />
           <Route path="/maintenance" element={<MaintenancePage />} />
+          <Route path="/banned" element={<BannedPage />} />
           <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
           <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
           <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
