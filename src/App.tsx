@@ -28,7 +28,7 @@ import { AgeVerificationDialog } from './components/AgeVerificationDialog';
 const DomainRedirect = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  
   useEffect(() => {
     const hostname = window.location.hostname;
     if (hostname === 'shopblox.shop') {
@@ -46,7 +46,8 @@ const AgeCheck = () => {
   
   useEffect(() => {
     const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
-    if (isBanned && location.pathname !== '/banned' && location.pathname !== '/support') {
+    const isPrivacyOrTerms = ['/privacy', '/terms'].includes(location.pathname);
+    if (isBanned && !isPrivacyOrTerms && location.pathname !== '/banned' && location.pathname !== '/support') {
       navigate('/banned');
     }
   }, [navigate, location]);
@@ -57,63 +58,61 @@ const AgeCheck = () => {
 function App() {
   const [showBanner, setShowBanner] = useState(true);
   const [showAgeVerification, setShowAgeVerification] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
     const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
-    if (!isVerified && !isBanned) {
+    const isPrivacyOrTerms = ['/privacy', '/terms'].includes(location.pathname);
+    if (!isVerified && !isBanned && !isPrivacyOrTerms) {
       setShowAgeVerification(true);
     }
-  }, []);
+  }, [location]);
 
   const handleAgeVerified = () => {
     setShowAgeVerification(false);
   };
 
   return (
-    <Router>
-      <DomainRedirect />
-      <AgeCheck />
-      <div className="w-full h-full min-h-screen flex flex-col">
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ShopPage />} />
-          <Route path="/shop/:productId" element={<ProductPage />} />
-          <Route path="/success" element={<SuccessPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/support" element={<SupportPage />} />
-          <Route path="/redeem" element={<RedeemPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/server-error" element={<ServerErrorPage />} />
-          <Route path="/maintenance" element={<MaintenancePage />} />
-          <Route path="/banned" element={<BannedPage />} />
-          <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
-          <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
-          <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <Footer />
-        {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
-        {showAgeVerification && !document.cookie.includes('age_failed_check') && (
-          <AgeVerificationDialog onVerified={handleAgeVerified} />
-        )}
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: '#171717',
-              border: '1px solid #262626',
-              color: '#fff',
-            },
-            className: 'font-sans'
-          }}
-        />
-      </div>
-    </Router>
+    <div className="w-full h-full min-h-screen flex flex-col">
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/shop" element={<ShopPage />} />
+        <Route path="/shop/:productId" element={<ProductPage />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/support" element={<SupportPage />} />
+        <Route path="/redeem" element={<RedeemPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/server-error" element={<ServerErrorPage />} />
+        <Route path="/maintenance" element={<MaintenancePage />} />
+        <Route path="/banned" element={<BannedPage />} />
+        <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
+        <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
+        <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      <Footer />
+      {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
+      {showAgeVerification && !document.cookie.includes('age_failed_check') && (
+        <AgeVerificationDialog onVerified={handleAgeVerified} />
+      )}
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#171717',
+            border: '1px solid #262626',
+            color: '#fff',
+          },
+          className: 'font-sans'
+        }}
+      />
+    </div>
   );
 }
 
