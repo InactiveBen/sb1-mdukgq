@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, Info } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface AgeVerificationDialogProps {
   onVerified: () => void;
 }
 
 export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ onVerified }) => {
+  const navigate = useNavigate();
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
   const [year, setYear] = useState('');
@@ -36,7 +37,9 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
       document.cookie = "age_verified=true; max-age=2592000; path=/";
       onVerified();
     } else {
-      setError('You must be at least 13 years old to use this site.');
+      // Set banned cookie that expires in 30 days
+      document.cookie = "age_failed_check=true; max-age=2592000; path=/";
+      navigate('/banned');
     }
   };
 
@@ -60,7 +63,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
         <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg mb-6">
           <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-blue-300">
-            We don’t store your date of birth. Instead, we use a cookie to remember that you’ve confirmed your age.
+            We don't store your date of birth. Instead, we use a cookie to remember that you've confirmed your age.
           </p>
         </div>
 
@@ -129,7 +132,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
                   setTermsAccepted(e.target.checked);
                   if (e.target.checked) setError('');
                 }}
-                className="h-4 w-4 rounded border-neutral-800 bg-neutral-950 text-red-500 focus:ring-red-500 focus:ring-offset-neutral-900"
+                className="h-4 w-4"
               />
             </div>
             <label htmlFor="terms" className="text-sm text-neutral-300">
