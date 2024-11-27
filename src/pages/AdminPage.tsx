@@ -2,7 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Lock, LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 import { PageBackground } from '../components/shared/PageBackground';
+useEffect(() => {
+  toast.error('Authentication Required', {
+    description: 'Please log in to access this feature.',
+    duration: 5000,
+  });
+}, []);
+
 
 export const AdminPage: React.FC = () => {
   return (
