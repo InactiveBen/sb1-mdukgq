@@ -9,8 +9,6 @@ export interface Product {
   featured?: boolean;
   isNew?: boolean;
   stripeLink?: string;
-  placeId?: string;
   description?: string;
   tryOnLink?: string;
-  testLink?: string;
 }
