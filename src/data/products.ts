@@ -10,7 +10,7 @@ export const products: Product[] = [
     category: 'test',
     stock: 1,
     featured: true,
-    stripeLink: 'https://buy.stripe.com/example1',
+    stripeLink: 'https://buy.stripe.com/fZedRB2a547y4esfYZ',
     description: 'DO NOT BUY THIS ITEM IT IS A TEST ITEM NO ITEM WILL BE SENT',
     tryOnLink: 'https://www.roblox.com/catalog/'
   },
