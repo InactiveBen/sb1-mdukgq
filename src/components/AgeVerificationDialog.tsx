@@ -60,7 +60,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
         <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg mb-6">
           <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-blue-300">
-            Your date of birth is not stored on our servers. We only use a cookie to remember that you've verified your age.
+            We don’t store your date of birth. Instead, we use a cookie to remember that you’ve confirmed your age.
           </p>
         </div>
 
