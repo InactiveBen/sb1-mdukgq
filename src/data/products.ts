@@ -3,7 +3,7 @@ import { Product } from '../types';
 export const products: Product[] = [
   {
     id: 'test-product',
-    name: 'Test Product',
+    name: 'shopblox.gg',
     price: 1,
     image: 'https://cxpay.events/wp-content/uploads/2024/04/Test-Product-Do-not-Buy.png',
     rarity: 'normal',
@@ -11,7 +11,7 @@ export const products: Product[] = [
     stock: 1,
     featured: true,
     stripeLink: 'https://buy.stripe.com/fZedRB2a547y4esfYZ',
-    description: 'DO NOT BUY THIS ITEM IT IS A TEST ITEM NO ITEM WILL BE SENT',
+    description: 'This is a general charge from shopblox.gg.',
     tryOnLink: 'https://www.roblox.com/catalog/'
   },
 ];
