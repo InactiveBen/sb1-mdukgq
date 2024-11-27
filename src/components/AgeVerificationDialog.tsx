@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Info } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface AgeVerificationDialogProps {
   onVerified: () => void;
@@ -11,9 +12,15 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
   const [day, setDay] = useState('');
   const [year, setYear] = useState('');
   const [error, setError] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!termsAccepted) {
+      setError('You must accept the Terms of Service and Privacy Policy to continue.');
+      return;
+    }
     
     const birthDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     const today = new Date();
@@ -47,8 +54,15 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
       >
         <h2 className="text-xl font-bold text-white mb-4">Age Verification Required</h2>
         <p className="text-neutral-300 mb-6">
-          You must be 13 years or older to use ShopBlox. Please enter your date of birth.
+          You must be 13 years or older to shop at ShopBlox. Please enter your date of birth.
         </p>
+
+        <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg mb-6">
+          <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-blue-300">
+            Your date of birth is not stored on our servers. We only use a cookie to remember that you've verified your age.
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-3 gap-4">
@@ -103,6 +117,31 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
                 ))}
               </select>
             </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="flex h-6 items-center">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={termsAccepted}
+                onChange={(e) => {
+                  setTermsAccepted(e.target.checked);
+                  if (e.target.checked) setError('');
+                }}
+                className="h-4 w-4 rounded border-neutral-800 bg-neutral-950 text-red-500 focus:ring-red-500 focus:ring-offset-neutral-900"
+              />
+            </div>
+            <label htmlFor="terms" className="text-sm text-neutral-300">
+              By continuing, I agree to ShopBlox's{' '}
+              <Link to="/terms" target="_blank" className="text-red-500 hover:text-red-400">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link to="/privacy" target="_blank" className="text-red-500 hover:text-red-400">
+                Privacy Policy
+              </Link>
+            </label>
           </div>
 
           {error && (
