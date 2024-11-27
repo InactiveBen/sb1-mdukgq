@@ -12,7 +12,7 @@ import { PrivacyPage } from './pages/PrivacyPage';
 import { SupportPage } from './pages/SupportPage';
 import { RedeemPage } from './pages/RedeemPage';
 import { SignUpPage } from './pages/SignUpPage';
-import { BusinessRequirementsPage } from './pages/BusinessRequirementsPage';
+// import { BusinessRequirementsPage } from './pages/BusinessRequirementsPage';
 import { LoginPage } from './pages/LoginPage';
 import { AdminPage } from './pages/AdminPage';
 import { NotFoundPage } from './pages/NotFoundPage';
