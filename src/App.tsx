@@ -14,7 +14,6 @@ import { RedeemPage } from './pages/RedeemPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { LoginPage } from './pages/LoginPage';
 import { AdminPage } from './pages/AdminPage';
-import { AgentDashboardPage } from './pages/admin/AgentDashboardPage';
 import { ServerErrorPage } from './pages/ServerErrorPage';
 import { MaintenancePage } from './pages/MaintenancePage';
 import { BannedPage } from './pages/BannedPage';
@@ -59,7 +58,6 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="/admin/support" element={<AgentDashboardPage />} />
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/server-error" element={<ServerErrorPage />} />
           <Route path="/maintenance" element={<MaintenancePage />} />
