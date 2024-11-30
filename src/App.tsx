@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -14,69 +14,34 @@ import { RedeemPage } from './pages/RedeemPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { LoginPage } from './pages/LoginPage';
 import { AdminPage } from './pages/AdminPage';
+import { AgentDashboardPage } from './pages/admin/AgentDashboardPage';
 import { ServerErrorPage } from './pages/ServerErrorPage';
 import { MaintenancePage } from './pages/MaintenancePage';
 import { BannedPage } from './pages/BannedPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { PageBanner } from './components/PageBanner';
+import { FeedbackPage } from './pages/FeedbackPage';
 import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
 import { SellerSignupPage } from './pages/admin/templates/SellerSignupPage';
 import { NewLoginPage } from './pages/admin/templates/NewLoginPage';
+import { RequestFeedbackPage } from './pages/admin/templates/RequestFeedbackPage';
 import { AgeVerificationDialog } from './components/AgeVerificationDialog';
 import { MaintenanceGuard } from './components/MaintenanceGuard';
 import { maintenanceConfig } from './config/maintenance';
-
-// Domain redirect component
-const DomainRedirect = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  useEffect(() => {
-    const hostname = window.location.hostname;
-    if (hostname === 'shopblox.shop') {
-      window.location.href = `https://shopblox.gg${location.pathname}`;
-    }
-  }, [location]);
-
-  return null;
-};
-
-// Age check component
-const AgeCheck = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  useEffect(() => {
-    const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
-    const isPrivacyOrTerms = ['/privacy', '/terms'].includes(location.pathname);
-    if (isBanned && !isPrivacyOrTerms && location.pathname !== '/banned' && location.pathname !== '/support') {
-      navigate('/banned');
-    }
-  }, [navigate, location]);
-
-  return null;
-};
+import { FloatingChat } from './components/chat/FloatingChat';
+import { Banner } from './components/Banner';
 
 function App() {
-  const [showBanner, setShowBanner] = useState(true);
-  const [showAgeVerification, setShowAgeVerification] = useState(false);
-  const location = useLocation();
+  const [showBanner, setShowBanner] = React.useState(true);
+  const [showAgeVerification, setShowAgeVerification] = React.useState(false);
 
-  useEffect(() => {
-    if (!maintenanceConfig.enabled) {
-      const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
-      const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
-      const isPrivacyOrTerms = ['/privacy', '/terms'].includes(location.pathname);
-      if (!isVerified && !isBanned && !isPrivacyOrTerms) {
-        setShowAgeVerification(true);
-      }
+  React.useEffect(() => {
+    const isVerified = document.cookie.includes('age_verified=');
+    const isBanned = document.cookie.includes('age_failed_check=');
+    if (!isVerified && !isBanned && !maintenanceConfig.enabled) {
+      setShowAgeVerification(true);
     }
-  }, [location]);
-
-  const handleAgeVerified = () => {
-    setShowAgeVerification(false);
-  };
+  }, []);
 
   return (
     <div className="w-full h-full min-h-screen flex flex-col">
@@ -94,6 +59,8 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/support" element={<AgentDashboardPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/server-error" element={<ServerErrorPage />} />
           <Route path="/maintenance" element={<MaintenancePage />} />
           <Route path="/banned" element={<BannedPage />} />
@@ -101,14 +68,16 @@ function App() {
           <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
           <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
           <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
+          <Route path="/admin/pages/template/request_feedback" element={<RequestFeedbackPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </MaintenanceGuard>
       <Footer />
-      {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
+      {showBanner && <Banner onClose={() => setShowBanner(false)} />}
       {showAgeVerification && !document.cookie.includes('age_failed_check') && !maintenanceConfig.enabled && (
-        <AgeVerificationDialog onVerified={handleAgeVerified} />
+        <AgeVerificationDialog onVerified={() => setShowAgeVerification(false)} />
       )}
+      {!maintenanceConfig.enabled && <FloatingChat />}
       <Toaster 
         position="top-right"
         toastOptions={{
