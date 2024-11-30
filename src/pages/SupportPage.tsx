@@ -1,89 +1,121 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, ExternalLink, Shield } from 'lucide-react';
-import { sanitizeURL } from '../utils/sanitize';
+import { Search, AlertCircle, Mail } from 'lucide-react';
+import { supportCategories } from '../data/supportCategories';
+import { SupportCategory } from '../components/support/SupportCategory';
+import { SearchResults } from '../components/support/SearchResults';
+import { SupportModal } from '../components/support/SupportModal';
+import { PageBackground } from '../components/shared/PageBackground';
+import { findMatchingArticles } from '../utils/supportSearch';
+import { SupportArticle } from '../types/support';
 
 export const SupportPage: React.FC = () => {
-  const discordUrl = sanitizeURL('https://discord.gg/tdvCm2rXTN');
-  const trustpilotUrl = sanitizeURL('https://www.trustpilot.com/review/shopblox.gg');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<SupportArticle | null>(null);
+
+  const searchResults = searchQuery ? findMatchingArticles(searchQuery) : [];
+  const showSearchResults = searchQuery.length > 0;
+
+  const handleCategorySelect = (categoryId: string) => {
+    setSelectedCategory(selectedCategory === categoryId ? null : categoryId);
+  };
+
+  const handleArticleSelect = (article: SupportArticle) => {
+    setSelectedArticle(article);
+  };
 
   return (
-    <div className="w-full h-full min-h-screen flex flex-col py-24">
-      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-6"
-        >
-          <Shield className="w-12 h-12 text-red-500 mx-auto" />
-          <h1 className="text-3xl font-bold text-white">Need Help? We're Here For You</h1>
-          
-          <p className="text-neutral-300 max-w-2xl mx-auto">
-            Our support team is available to assist you with any questions or concerns. 
-            For your security, we only provide support through our official Discord server.
-          </p>
+    <div className="relative isolate">
+      <PageBackground />
+      <div className="w-full h-full min-h-screen flex flex-col py-24">
+        <div className="w-full max-w-4xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-8"
+          >
+            {/* Header */}
+            <div className="text-center space-y-4">
+              <h1 className="text-3xl font-bold text-white">How can we help?</h1>
+              <p className="text-neutral-300 max-w-lg mx-auto">
+                Search our help center or browse the categories below to find the answers you need.
+              </p>
+            </div>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-            <a
-              href={discordUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90 transition-all"
+            {/* Search */}
+            <div className="relative">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for help..."
+                  className="w-full h-12 pl-12 pr-4 rounded-lg border border-neutral-800 bg-neutral-900 text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+
+              {/* Search Results */}
+              {showSearchResults && (
+                <SearchResults 
+                  results={searchResults} 
+                  onClose={() => setSearchQuery('')}
+                  onArticleSelect={handleArticleSelect}
+                />
+              )}
+            </div>
+
+            {/* Categories */}
+            {!showSearchResults && (
+              <div className="grid gap-6 md:grid-cols-2">
+                {supportCategories.map((category, index) => (
+                  <SupportCategory
+                    key={category.id}
+                    category={category}
+                    isSelected={selectedCategory === category.id}
+                    onSelect={() => handleCategorySelect(category.id)}
+                    onArticleSelect={handleArticleSelect}
+                    delay={index * 0.1}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Emergency Contact */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-red-500/10 border border-red-500 rounded-lg p-6 mt-8"
             >
-              <MessageCircle className="w-5 h-5" />
-              Join Our Discord
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </div>
-
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-neutral-800/50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-white mb-2">Secure Support</h3>
-              <p className="text-neutral-300">
-                All support is handled through our official Discord server for enhanced security and verification.
-              </p>
-            </div>
-
-            <div className="bg-neutral-800/50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-white mb-2">24/7 Availability</h3>
-              <p className="text-neutral-300">
-                Our support team is available around the clock to assist you whenever you need help.
-              </p>
-            </div>
-
-            <div className="bg-neutral-800/50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-white mb-2">Verified Support</h3>
-              <p className="text-neutral-300">
-                Only trust support from verified staff members with official roles in our Discord server.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-16 bg-neutral-800/30 p-8 rounded-lg">
-            <h2 className="text-xl font-bold text-white mb-4">Security Notice</h2>
-            <div className="space-y-6 text-left">
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Official Support Channels</h3>
-                <p className="text-neutral-300">
-                  We only provide support through our official Discord server. Never share sensitive information through other channels.
-                </p>
+              <div className="flex items-start gap-4">
+                <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0" />
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-2">Need immediate assistance?</h3>
+                  <p className="text-neutral-300 mb-4">
+                    If you need urgent help or can't find what you're looking for, our support team is here to help. 
+                    We take all support requests seriously and will respond within 24 hours.
+                  </p>
+                  <a
+                    href="mailto:support@shopblox.gg"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Contact Support
+                  </a>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Verify Staff Members</h3>
-                <p className="text-neutral-300">
-                  Always verify staff member roles in our Discord server. Never trust direct messages from unverified users.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Protect Your Information</h3>
-                <p className="text-neutral-300">
-                  Never share your password or sensitive information. Our staff will never ask for this information.
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Support Modal */}
+        <SupportModal
+          article={selectedArticle}
+          onClose={() => setSelectedArticle(null)}
+        />
       </div>
     </div>
   );
