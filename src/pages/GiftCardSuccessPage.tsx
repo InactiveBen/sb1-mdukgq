@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Gift, Mail, ArrowLeft, CheckCircle2, Sparkles } from 'lucide-react';
+import { Gift, Mail, ArrowLeft, CheckCircle2, Sparkles, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { PageBackground } from '../components/shared/PageBackground';
@@ -10,7 +10,7 @@ export const GiftCardSuccessPage: React.FC = () => {
     confetti({
       particleCount: 100,
       spread: 70,
-      origin: { y: 0.6 },
+      origin: { x: 0.2, y: 0.6 },
       colors: ['#ef4444', '#ffffff', '#737373'],
       ticks: 200,
       gravity: 1.2,
@@ -49,6 +49,18 @@ export const GiftCardSuccessPage: React.FC = () => {
                     <h3 className="font-medium text-white">Check Your Email</h3>
                     <p className="text-sm text-neutral-300">
                       We've sent the gift card and receipt to your inbox
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-neutral-800/50 p-4 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-red-500 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-medium text-white">Delivery Time</h3>
+                    <p className="text-sm text-neutral-300">
+                      Most gift cards are delivered instantly, but it may take up to 24 hours in some cases. Please check your spam folder if you don't see it.
                     </p>
                   </div>
                 </div>
