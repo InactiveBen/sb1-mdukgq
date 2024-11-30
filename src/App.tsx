@@ -24,6 +24,8 @@ import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
 import { SellerSignupPage } from './pages/admin/templates/SellerSignupPage';
 import { NewLoginPage } from './pages/admin/templates/NewLoginPage';
 import { AgeVerificationDialog } from './components/AgeVerificationDialog';
+import { MaintenanceGuard } from './components/MaintenanceGuard';
+import { maintenanceConfig } from './config/maintenance';
 
 // Domain redirect component
 const DomainRedirect = () => {
@@ -77,27 +79,29 @@ function App() {
   return (
     <div className="w-full h-full min-h-screen flex flex-col">
       <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/shop/:productId" element={<ProductPage />} />
-        <Route path="/success" element={<SuccessPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/support" element={<SupportPage />} />
-        <Route path="/redeem" element={<RedeemPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/server-error" element={<ServerErrorPage />} />
-        <Route path="/maintenance" element={<MaintenancePage />} />
-        <Route path="/banned" element={<BannedPage />} />
-        <Route path="/sitemap" element={<SitemapPage />} />
-        <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
-        <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
-        <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <MaintenanceGuard>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/shop/:productId" element={<ProductPage />} />
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/support" element={<SupportPage />} />
+          <Route path="/redeem" element={<RedeemPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/server-error" element={<ServerErrorPage />} />
+          <Route path="/maintenance" element={<MaintenancePage />} />
+          <Route path="/banned" element={<BannedPage />} />
+          <Route path="/sitemap" element={<SitemapPage />} />
+          <Route path="/admin/pages/template/product_sent" element={<ProductSentPage />} />
+          <Route path="/admin/pages/template/seller_signup" element={<SellerSignupPage />} />
+          <Route path="/admin/pages/template/new_login" element={<NewLoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </MaintenanceGuard>
       <Footer />
       {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
       {showAgeVerification && !document.cookie.includes('age_failed_check') && (
