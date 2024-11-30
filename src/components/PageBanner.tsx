@@ -27,8 +27,8 @@ export function PageBanner({ onClose }: BannerProps) {
         };
       default:
         return {
-          title: 'Black Friday Sale',
-          message: 'Use code black20 for 20% off all orders for a limited time only',
+          title: 'Cyber Monday Sale',
+          message: 'Use code cyber20 for 20% off all orders for a limited time only',
           icon: Tag
         };
     }
