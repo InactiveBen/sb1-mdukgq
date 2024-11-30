@@ -17,7 +17,6 @@ import { AdminPage } from './pages/AdminPage';
 import { ServerErrorPage } from './pages/ServerErrorPage';
 import { MaintenancePage } from './pages/MaintenancePage';
 import { BannedPage } from './pages/BannedPage';
-import { SitemapPage } from './pages/SitemapPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { PageBanner } from './components/PageBanner';
 import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
