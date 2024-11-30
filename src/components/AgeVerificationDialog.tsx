@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Info } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CustomDropdown } from './shared/CustomDropdown';
+import { AgeConfirmationDialog } from './AgeConfirmationDialog';
 
 interface AgeVerificationDialogProps {
   onVerified: () => void;
@@ -15,6 +15,17 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
   const [year, setYear] = useState('');
   const [error, setError] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [calculatedAge, setCalculatedAge] = useState(0);
+
+  useEffect(() => {
+    // Check if user is banned
+    const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
+    if (isBanned) {
+      onVerified(); // Close the dialog
+      navigate('/banned');
+    }
+  }, [navigate, onVerified]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,18 +37,36 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
     
     const birthDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
+    let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
 
-    if (age >= 13) {
+    // Validate age range
+    if (age < 5) {
+      setError('Please enter your real date of birth.');
+      return;
+    }
+
+    if (age > 90) {
+      setError('Please enter your real date of birth.');
+      return;
+    }
+
+    setError(''); // Clear any existing errors
+    setCalculatedAge(age);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmAge = () => {
+    if (calculatedAge >= 13) {
       document.cookie = "age_verified=true; max-age=2592000; path=/";
       onVerified();
     } else {
       document.cookie = "age_failed_check=true; max-age=2592000; path=/";
+      onVerified(); // Close the dialog before navigation
       navigate('/banned');
     }
   };
@@ -69,13 +98,6 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
         <p className="text-neutral-300 mb-6">
           You must be 13 years or older to shop at ShopBlox. Please enter your date of birth.
         </p>
-
-        <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg mb-6">
-          <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-blue-300">
-            We don't store your date of birth on our servers. Instead, we use a cookie to remember that you've confirmed your age.
-          </p>
-        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-3 gap-4">
@@ -129,7 +151,6 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
 
           {error && (
             <div className="flex items-center gap-2 text-red-500 bg-red-500/10 p-3 rounded-md">
-              <AlertCircle className="w-5 h-5 flex-shrink-0" />
               <p className="text-sm">{error}</p>
             </div>
           )}
@@ -142,6 +163,14 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
           </button>
         </form>
       </motion.div>
+
+      {showConfirmation && (
+        <AgeConfirmationDialog
+          age={calculatedAge}
+          onConfirm={handleConfirmAge}
+          onCancel={() => setShowConfirmation(false)}
+        />
+      )}
     </div>
   );
 };
