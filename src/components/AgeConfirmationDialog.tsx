@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, AlertTriangle, Lock } from 'lucide-react';
+import { AlertTriangle, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface AgeConfirmationDialogProps {
@@ -40,16 +40,6 @@ export const AgeConfirmationDialog: React.FC<AgeConfirmationDialogProps> = ({
         </div>
 
         <div className="space-y-4">
-          <div className="flex items-start gap-3 p-4 bg-neutral-800/50 rounded-lg">
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-            <div className="space-y-1 text-left">
-              <p className="text-sm text-neutral-200 font-medium">Important Notice</p>
-              <p className="text-sm text-neutral-400">
-                Your date of birth is not stored on our servers. We use cookies to remember your age verification status.
-              </p>
-            </div>
-          </div>
-
           {isUnderAge && (
             <div className="flex items-start gap-3 p-4 bg-yellow-500/10 rounded-lg">
               <AlertTriangle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
