@@ -19,10 +19,9 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
   const [calculatedAge, setCalculatedAge] = useState(0);
 
   useEffect(() => {
-    // Check if user is banned
     const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
     if (isBanned) {
-      onVerified(); // Close the dialog
+      onVerified();
       navigate('/banned');
     }
   }, [navigate, onVerified]);
@@ -30,6 +29,11 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!month || !day || !year) {
+      setError('Please select your complete date of birth.');
+      return;
+    }
+
     if (!termsAccepted) {
       setError('You must accept the Terms of Service and Privacy Policy to continue.');
       return;
@@ -44,7 +48,6 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
       age--;
     }
 
-    // Validate age range
     if (age < 5) {
       setError('Please enter your real date of birth.');
       return;
@@ -55,7 +58,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
       return;
     }
 
-    setError(''); // Clear any existing errors
+    setError('');
     setCalculatedAge(age);
     setShowConfirmation(true);
   };
@@ -66,7 +69,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
       onVerified();
     } else {
       document.cookie = "age_failed_check=true; max-age=2592000; path=/";
-      onVerified(); // Close the dialog before navigation
+      onVerified();
       navigate('/banned');
     }
   };
@@ -107,6 +110,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
               onChange={setMonth}
               placeholder="Month"
               label="Month"
+              required
             />
             <CustomDropdown
               options={days}
@@ -114,6 +118,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
               onChange={setDay}
               placeholder="Day"
               label="Day"
+              required
             />
             <CustomDropdown
               options={years}
@@ -121,6 +126,7 @@ export const AgeVerificationDialog: React.FC<AgeVerificationDialogProps> = ({ on
               onChange={setYear}
               placeholder="Year"
               label="Year"
+              required
             />
           </div>
 
