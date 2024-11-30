@@ -20,6 +20,8 @@ import { MaintenancePage } from './pages/MaintenancePage';
 import { BannedPage } from './pages/BannedPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { ProductSuccessPage } from './pages/ProductSuccessPage';
+
 import { FeedbackPage } from './pages/FeedbackPage';
 import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
 import { SellerSignupPage } from './pages/admin/templates/SellerSignupPage';
@@ -59,6 +61,7 @@ function App() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/support" element={<SupportPage />} />
           <Route path="/redeem" element={<RedeemPage />} />
+          <Route path="/success/product" element={<ProductSuccessPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<AdminPage />} />
