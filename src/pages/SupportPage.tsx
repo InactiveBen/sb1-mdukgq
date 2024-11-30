@@ -5,6 +5,7 @@ import { supportCategories } from '../data/supportCategories';
 import { SupportCategory } from '../components/support/SupportCategory';
 import { SearchResults } from '../components/support/SearchResults';
 import { SupportModal } from '../components/support/SupportModal';
+import { ContactSupportModal } from '../components/support/ContactSupportModal';
 import { PageBackground } from '../components/shared/PageBackground';
 import { findMatchingArticles } from '../utils/supportSearch';
 import { SupportArticle } from '../types/support';
@@ -13,6 +14,7 @@ export const SupportPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<SupportArticle | null>(null);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const searchResults = searchQuery ? findMatchingArticles(searchQuery) : [];
   const showSearchResults = searchQuery.length > 0;
@@ -23,6 +25,10 @@ export const SupportPage: React.FC = () => {
 
   const handleArticleSelect = (article: SupportArticle) => {
     setSelectedArticle(article);
+  };
+
+  const handleContactSupport = () => {
+    setShowContactModal(true);
   };
 
   return (
@@ -36,7 +42,6 @@ export const SupportPage: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="space-y-8"
           >
-            {/* Header */}
             <div className="text-center space-y-4">
               <h1 className="text-3xl font-bold text-white">How can we help?</h1>
               <p className="text-neutral-300 max-w-lg mx-auto">
@@ -44,7 +49,6 @@ export const SupportPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Search */}
             <div className="relative">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
@@ -57,7 +61,6 @@ export const SupportPage: React.FC = () => {
                 />
               </div>
 
-              {/* Search Results */}
               {showSearchResults && (
                 <SearchResults 
                   results={searchResults} 
@@ -67,7 +70,6 @@ export const SupportPage: React.FC = () => {
               )}
             </div>
 
-            {/* Categories */}
             {!showSearchResults && (
               <div className="grid gap-6 md:grid-cols-2">
                 {supportCategories.map((category, index) => (
@@ -83,7 +85,6 @@ export const SupportPage: React.FC = () => {
               </div>
             )}
 
-            {/* Emergency Contact */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,23 +99,32 @@ export const SupportPage: React.FC = () => {
                     If you need urgent help or can't find what you're looking for, our support team is here to help. 
                     We take all support requests seriously and will respond within 24 hours.
                   </p>
-                  <a
-                    href="mailto:support@shopblox.gg"
+                  <button
+                    onClick={handleContactSupport}
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90"
                   >
                     <Mail className="w-4 h-4" />
                     Contact Support
-                  </a>
+                  </button>
                 </div>
               </div>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Support Modal */}
         <SupportModal
           article={selectedArticle}
           onClose={() => setSelectedArticle(null)}
+          onContactSupport={() => {
+            setSelectedArticle(null);
+            setShowContactModal(true);
+          }}
+        />
+
+        <ContactSupportModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          article={selectedArticle}
         />
       </div>
     </div>
