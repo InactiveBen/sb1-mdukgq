@@ -15,7 +15,7 @@ export function Banner({ onClose }: BannerProps) {
         layout
         className="relative rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800"
       >
-        <div 
+        <div
           className="px-6 py-4 cursor-pointer"
           onClick={() => setIsExpanded(!isExpanded)}
         >
@@ -28,7 +28,7 @@ export function Banner({ onClose }: BannerProps) {
                 </h3>
                 <p className="text-sm text-neutral-300 font-medium">
                   Use code CYBER20 to get 20% off at checkout*{' '}
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setIsExpanded(!isExpanded);
@@ -36,8 +36,8 @@ export function Banner({ onClose }: BannerProps) {
                     className="inline-flex items-center gap-1 text-red-500 hover:text-red-400 underline underline-offset-2 transition-colors"
                   >
                     See details
-                    <ChevronDown 
-                      className={`h-3 w-3 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} 
+                    <ChevronDown
+                      className={`h-3 w-3 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                     />
                   </button>
                 </p>
@@ -75,10 +75,13 @@ export function Banner({ onClose }: BannerProps) {
                   <div className="bg-neutral-800/50 rounded-lg p-3 space-y-2">
                     <p className="font-medium text-white">Terms & Conditions:</p>
                     <ul className="list-disc pl-4 space-y-1">
-                      <li>Discount applies to select items only</li>
-                      <li>Cannot be combined with other offers</li>
-                      <li>Limited time offer</li>
-                      <li>Excludes chaser items and new releases</li>
+                      <li>Discount is valid exclusively on select items, as determined by ShopBlox.</li>
+                      <li>This offer cannot be combined with any other discounts, promotions, or coupon codes.</li>
+                      <li>The promotion is valid for a limited time only and may be modified or terminated at ShopBlox’s discretion without prior notice.</li>
+                      <li>Excludes chaser items, newly released products, and other items specified by ShopBlox.</li>
+                      <li>Discount code must be entered at checkout and cannot be applied retroactively to prior purchases.</li>
+                      <li>This offer has no cash value and cannot be redeemed for cash or credit.</li>
+                      <li>Additional restrictions may apply. For full details, please refer to our <a href="https://shopblox.gg/terms" className="text-red-500 hover:text-red-400 underline underline-offset-2 transition-colors" target="_blank" rel="noopener noreferrer">Terms of Service</a>.</li>
                     </ul>
                   </div>
                 </div>
