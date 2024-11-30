@@ -8,6 +8,7 @@ interface CustomDropdownProps {
   onChange: (value: string) => void;
   placeholder: string;
   label: string;
+  required?: boolean;
 }
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -15,7 +16,8 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   value,
   onChange,
   placeholder,
-  label
+  label,
+  required = true
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,12 +38,12 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   return (
     <div className="relative" ref={dropdownRef}>
       <label className="block text-sm font-medium text-neutral-300 mb-1">
-        {label}
+        {label}{required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white flex items-center justify-between"
+        className={`w-full rounded-md border ${value ? 'border-neutral-800' : 'border-red-500'} bg-neutral-950 px-3 py-2 text-sm text-white flex items-center justify-between`}
       >
         <span className={selectedOption ? 'text-white' : 'text-neutral-400'}>
           {selectedOption ? selectedOption.label : placeholder}
