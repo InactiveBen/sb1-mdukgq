@@ -7,7 +7,7 @@ export interface FeedbackParams {
 }
 
 export const validateFeedbackParams = (params: URLSearchParams): { isValid: boolean; error?: string } => {
-  const validParams = ['ticket', 'order', 'agent', 'issue', 'ServiceNow'];
+  const validParams = ['ticket', 'order', 'agent', 'issue', 'ServiceNow', 'discord'];
   let hasValidParam = false;
 
   for (const param of validParams) {
