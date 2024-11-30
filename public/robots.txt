@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://shopblox.codes/sitemap.xml
+Sitemap: https://shopblox.gg/sitemap.xml
 
 # Disallow admin and sensitive pages
 Disallow: /admin/
