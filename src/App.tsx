@@ -64,11 +64,13 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
-    const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
-    const isPrivacyOrTerms = ['/privacy', '/terms'].includes(location.pathname);
-    if (!isVerified && !isBanned && !isPrivacyOrTerms) {
-      setShowAgeVerification(true);
+    if (!maintenanceConfig.enabled) {
+      const isVerified = document.cookie.split(';').some(item => item.trim().startsWith('age_verified='));
+      const isBanned = document.cookie.split(';').some(item => item.trim().startsWith('age_failed_check='));
+      const isPrivacyOrTerms = ['/privacy', '/terms'].includes(location.pathname);
+      if (!isVerified && !isBanned && !isPrivacyOrTerms) {
+        setShowAgeVerification(true);
+      }
     }
   }, [location]);
 
@@ -104,7 +106,7 @@ function App() {
       </MaintenanceGuard>
       <Footer />
       {showBanner && <PageBanner onClose={() => setShowBanner(false)} />}
-      {showAgeVerification && !document.cookie.includes('age_failed_check') && (
+      {showAgeVerification && !document.cookie.includes('age_failed_check') && !maintenanceConfig.enabled && (
         <AgeVerificationDialog onVerified={handleAgeVerified} />
       )}
       <Toaster 
