@@ -9,6 +9,7 @@ import { ProductPage } from './pages/ProductPage';
 import { SuccessPage } from './pages/SuccessPage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { GiftCardSuccessPage } from './pages/GiftCardSuccessPage';
 import { SupportPage } from './pages/SupportPage';
 import { RedeemPage } from './pages/RedeemPage';
 import { SignUpPage } from './pages/SignUpPage';
@@ -54,6 +55,7 @@ function App() {
           <Route path="/shop/:productId" element={<ProductPage />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/gift-cards/success" element={<GiftCardSuccessPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/support" element={<SupportPage />} />
           <Route path="/redeem" element={<RedeemPage />} />
