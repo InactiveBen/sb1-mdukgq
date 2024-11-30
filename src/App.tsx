@@ -28,7 +28,9 @@ import { AgeVerificationDialog } from './components/AgeVerificationDialog';
 import { MaintenanceGuard } from './components/MaintenanceGuard';
 import { maintenanceConfig } from './config/maintenance';
 import { FloatingChat } from './components/chat/FloatingChat';
-import { Banner } from './components/PageBanner';
+import { Banner } from './components/Banner';
+import { PageBanner } from './components/PageBanner';
+
 
 function App() {
   const [showBanner, setShowBanner] = React.useState(true);
