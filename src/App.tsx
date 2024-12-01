@@ -7,7 +7,6 @@ import { Banner } from './components/Banner';
 import { AgeVerificationDialog } from './components/AgeVerificationDialog';
 import { MaintenanceGuard } from './components/MaintenanceGuard';
 import { maintenanceConfig } from './config/maintenance';
-import { FloatingChat } from './components/chat/FloatingChat';
 
 function App() {
   const [showBanner, setShowBanner] = useState(true);
@@ -36,7 +35,6 @@ function App() {
       {showAgeVerification && !document.cookie.includes('age_failed_check') && !maintenanceConfig.enabled && (
         <AgeVerificationDialog onVerified={handleAgeVerified} />
       )}
-      {!maintenanceConfig.enabled && <FloatingChat />}
       <Toaster 
         position="top-right"
         toastOptions={{
