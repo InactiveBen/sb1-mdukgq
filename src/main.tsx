@@ -19,6 +19,7 @@ import { ProductPage } from './pages/ProductPage';
 import { SuccessPage } from './pages/SuccessPage';
 import { ProductSuccessPage } from './pages/ProductSuccessPage';
 import { TermsPage } from './pages/TermsPage';
+import { VerifyEmploymentPage } from './pages/VerifyEmploymentPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { SupportPage } from './pages/SupportPage';
 import { RedeemPage } from './pages/RedeemPage';
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
       <Route path="server-error" element={<ServerErrorPage />} />
       <Route path="maintenance" element={<MaintenancePage />} />
       <Route path="banned" element={<BannedPage />} />
+      <Route path="verify" element={<VerifyEmploymentPage />} />
       <Route path="sitemap" element={<SitemapPage />} />
       <Route path="gift-cards/success" element={<GiftCardSuccessPage />} />
       <Route path="admin/pages/template/product_sent" element={<ProductSentPage />} />
