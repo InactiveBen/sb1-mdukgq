@@ -12,16 +12,7 @@ interface StatItemProps {
 const StatItem: React.FC<StatItemProps> = ({ name, value, delay, inView }) => {
   const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
   const suffix = value.replace(/[0-9]/g, '');
-  const count = useCountUp(inView ? numericValue : 0);
-
-  const formatNumber = (num: number) => {
-    if (num >= 1000) {
-      const thousands = Math.floor(num / 1000);
-      const remainder = num % 1000;
-      return remainder ? `${thousands},${remainder.toString().padStart(3, '0')}` : `${thousands}`;
-    }
-    return num.toString();
-  };
+  const count = useCountUp(inView ? numericValue : 0, 3000);
 
   return (
     <motion.div 
@@ -44,7 +35,7 @@ const StatItem: React.FC<StatItemProps> = ({ name, value, delay, inView }) => {
         animate={{ opacity: 1 }}
         transition={{ delay: delay + 0.1, duration: 0.4 }}
       >
-        {formatNumber(count)}{suffix}
+        {count.displayValue}{suffix}
       </motion.dd>
     </motion.div>
   );
