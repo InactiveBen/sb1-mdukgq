@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { ContactSupportModal } from '../support/ContactSupportModal';
+import { useLocation } from 'react-router-dom';
 
 interface FAQItemProps {
   question: string;
@@ -88,9 +89,22 @@ const faqs = [
 export const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [showContactModal, setShowContactModal] = useState(false);
+  const faqRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Handle both initial load and subsequent hash changes
+    if (location.hash === '#faq' && faqRef.current) {
+      const yOffset = -100; // Adjust this value based on your header height
+      const element = faqRef.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, [location.hash]);
 
   return (
-    <div id="faq" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+    <div ref={faqRef} id="faq" className="mx-auto max-w-7xl px-6 py-24 lg:px-8 scroll-mt-24">
       <h2 className="text-2xl font-bold leading-10 tracking-tight text-white">
         Frequently asked questions
       </h2>
