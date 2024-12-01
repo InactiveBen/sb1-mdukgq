@@ -23,7 +23,7 @@ export const employees: Employee[] = [
     name: "Brad",
     role: "Senior Developer",
     startDate: "2024-11-30",
-    endDate: "2024-12-01",
+    endDate: "",
     active: true,
     dwc: false
   },
@@ -32,7 +32,7 @@ export const employees: Employee[] = [
     name: "Zack",
     role: "Developer",
     startDate: "2024-11-30",
-    endDate: "2024-12-01",
+    endDate: "",
     active: true,
     dwc: false
   }
