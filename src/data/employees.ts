@@ -25,7 +25,7 @@ export const employees: Employee[] = [
     startDate: "2024-11-30",
     endDate: "2024-12-01",
     active: true,
-    dwc: true
+    dwc: false
   },
   {
     id: "268866065092706304",
