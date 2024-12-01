@@ -1,4 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
+import { ContactSupportModal } from '../support/ContactSupportModal';
+
+interface FAQItemProps {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onToggle }) => {
+  return (
+    <div className="border-b border-neutral-800 last:border-0">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between py-6 text-left"
+      >
+        <span className="text-base font-semibold leading-7 text-white">
+          {question}
+        </span>
+        <ChevronDown 
+          className={`w-5 h-5 text-neutral-400 transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ 
+              height: 'auto', 
+              opacity: 1,
+              transition: {
+                height: { duration: 0.2 },
+                opacity: { duration: 0.2, delay: 0.1 }
+              }
+            }}
+            exit={{ 
+              height: 0, 
+              opacity: 0,
+              transition: {
+                height: { duration: 0.2 },
+                opacity: { duration: 0.1 }
+              }
+            }}
+          >
+            <p className="pb-6 text-base leading-7 text-neutral-300">
+              {answer}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const faqs = [
   {
@@ -11,7 +69,7 @@ const faqs = [
   },
   {
     question: "Why should I purchase toy codes from ShopBlox?",
-    answer: "ShopBlox uses Stripe, a Level 1 payment provider, to ensure your payment goes through safely which allows you to purchase toy codes with a peace of mind."
+    answer: "ShopBlox uses Stripe, to ensure your payment goes through safely which allows you to purchase toy codes with a peace of mind."
   },
   {
     question: "Where do I find the toy code I purchased?",
@@ -23,41 +81,48 @@ const faqs = [
   },
   {
     question: "I'm looking for a specific item code, can you help?",
-    answer: "Sure! Join our Discord and create a ticket and we will do our best to find it for you."
+    answer: "Sure! Contact our support team and we will do our best to find it for you."
   }
 ];
 
 export const FAQ: React.FC = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [showContactModal, setShowContactModal] = useState(false);
+
   return (
     <div id="faq" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
       <h2 className="text-2xl font-bold leading-10 tracking-tight text-white">
         Frequently asked questions
       </h2>
       <p className="mt-6 max-w-2xl text-base leading-7 text-gray-300">
-        Have a different question and can't find the answer you're looking for? Reach out to our support team by{' '}
-        <a
-          target="_blank"
+        Have a different question and can't find the answer you're looking for? Reach out to our{' '}
+        <button
+          onClick={() => setShowContactModal(true)}
           className="font-semibold text-red-500 hover:text-red-600 ease-linear transition"
-          href="https://discord.gg/tdvCm2rXTN"
         >
-          joining the Discord
-        </a>{' '}
+          support team
+        </button>{' '}
         and we'll get back to you as soon as we can.
       </p>
       <div className="mt-20">
-        <dl className="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:gap-x-10">
-          {faqs.map((faq) => (
-            <div key={faq.question}>
-              <dt className="text-base font-semibold leading-7 text-white">
-                {faq.question}
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-gray-300">
-                {faq.answer}
-              </dd>
-            </div>
+        <dl className="space-y-2">
+          {faqs.map((faq, index) => (
+            <FAQItem
+              key={index}
+              question={faq.question}
+              answer={faq.answer}
+              isOpen={openIndex === index}
+              onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+            />
           ))}
         </dl>
       </div>
+
+      <ContactSupportModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        article={null}
+      />
     </div>
   );
 };
