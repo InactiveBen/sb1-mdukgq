@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Menu } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
 
 export const Header: React.FC = () => {
   const items = useCartStore((state) => state.items);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +18,34 @@ export const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Handle hash navigation after page load
+    if (location.hash === '#faq') {
+      const faqSection = document.getElementById('faq');
+      if (faqSection) {
+        setTimeout(() => {
+          faqSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
+
+  const handleFAQClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    
+    if (location.pathname !== '/') {
+      // If not on home page, navigate to home page with hash
+      navigate('/#faq');
+      return;
+    }
+    
+    // If already on home page, just scroll to FAQ section
+    const faqSection = document.getElementById('faq');
+    if (faqSection) {
+      faqSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
@@ -33,9 +63,13 @@ export const Header: React.FC = () => {
           <Link to="/shop" className="text-sm font-semibold leading-6 text-white hover:text-neutral-300 transition-colors">
             Shop
           </Link>
-          <Link to="/#faq" className="text-sm font-semibold leading-6 text-white hover:text-neutral-300 transition-colors">
+          <a 
+            href="/#faq" 
+            onClick={handleFAQClick}
+            className="text-sm font-semibold leading-6 text-white hover:text-neutral-300 transition-colors"
+          >
             FAQ
-          </Link>
+          </a>
           <Link to="/support" className="text-sm font-semibold leading-6 text-white hover:text-neutral-300 transition-colors">
             Support
           </Link>
