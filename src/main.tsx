@@ -30,7 +30,6 @@ import { MaintenancePage } from './pages/MaintenancePage';
 import { BannedPage } from './pages/BannedPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { GiftCardShop } from './components/giftcard/GiftCardShop';
 import { GiftCardSuccessPage } from './pages/GiftCardSuccessPage';
 import { ProductSentPage } from './pages/admin/templates/ProductSentPage';
 import { SellerSignupPage } from './pages/admin/templates/SellerSignupPage';
@@ -55,7 +54,6 @@ const router = createBrowserRouter(
       <Route path="maintenance" element={<MaintenancePage />} />
       <Route path="banned" element={<BannedPage />} />
       <Route path="sitemap" element={<SitemapPage />} />
-      <Route path="gift-cards" element={<GiftCardShop />} />
       <Route path="gift-cards/success" element={<GiftCardSuccessPage />} />
       <Route path="admin/pages/template/product_sent" element={<ProductSentPage />} />
       <Route path="admin/pages/template/seller_signup" element={<SellerSignupPage />} />
