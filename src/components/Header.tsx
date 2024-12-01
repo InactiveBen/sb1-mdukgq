@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Menu } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
 
 export const Header: React.FC = () => {
   const items = useCartStore((state) => state.items);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,13 +19,28 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Handle hash navigation after page load
+    if (location.hash === '#faq') {
+      const faqSection = document.getElementById('faq');
+      if (faqSection) {
+        setTimeout(() => {
+          faqSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
+
   const handleFAQClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    
     if (location.pathname !== '/') {
-      window.location.href = '/#faq';
+      // If not on home page, navigate to home page with hash
+      navigate('/#faq');
       return;
     }
     
+    // If already on home page, just scroll to FAQ section
     const faqSection = document.getElementById('faq');
     if (faqSection) {
       faqSection.scrollIntoView({ behavior: 'smooth' });
