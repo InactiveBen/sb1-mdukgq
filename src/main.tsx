@@ -14,6 +14,7 @@ import './index.css';
 
 // Import all pages
 import { HomePage } from './pages/HomePage';
+import { FeedbackPage } from './pages/FeedbackPage';
 import { ShopPage } from './pages/ShopPage';
 import { ProductPage } from './pages/ProductPage';
 import { SuccessPage } from './pages/SuccessPage';
@@ -60,7 +61,10 @@ const router = createBrowserRouter(
       <Route path="admin/pages/template/product_sent" element={<ProductSentPage />} />
       <Route path="admin/pages/template/seller_signup" element={<SellerSignupPage />} />
       <Route path="admin/pages/template/new_login" element={<NewLoginPage />} />
+      <Route path="feedback" element={<FeedbackPage />} />
+
       <Route path="*" element={<NotFoundPage />} />
+
     </Route>
   ),
 {
