@@ -18,6 +18,7 @@ export const ProductPage: React.FC = () => {
   const { productId } = useParams();
   const [email, setEmail] = useState('');
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'stripe' | 'robux' | null>(null);
 
   const product = products.find(p => p.id === productId);
 
@@ -25,19 +26,27 @@ export const ProductPage: React.FC = () => {
     return <InvalidProductPage />;
   }
 
-  const handleBuyNow = () => {
+  const handleBuyNow = (method: 'stripe' | 'robux') => {
+    setSelectedPaymentMethod(method);
     setShowEmailPrompt(true);
   };
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && product.stripeLink) {
+    if (!email || !selectedPaymentMethod) return;
+
+    if (selectedPaymentMethod === 'stripe' && product.stripeLink) {
       const url = new URL(product.stripeLink);
       url.searchParams.set('prefilled_email', email);
       window.open(url.toString(), '_blank');
-      setShowEmailPrompt(false);
-      setEmail('');
+    } else if (selectedPaymentMethod === 'robux') {
+      // Handle Robux payment flow
+      window.open(`https://www.roblox.com/game-pass/${product.id}`, '_blank');
     }
+
+    setShowEmailPrompt(false);
+    setEmail('');
+    setSelectedPaymentMethod(null);
   };
 
   const leftSection = <ProductGallery product={product} />;
@@ -64,7 +73,10 @@ export const ProductPage: React.FC = () => {
         email={email}
         setEmail={setEmail}
         onSubmit={handleEmailSubmit}
-        onClose={() => setShowEmailPrompt(false)}
+        onClose={() => {
+          setShowEmailPrompt(false);
+          setSelectedPaymentMethod(null);
+        }}
       />
     </>
   );
