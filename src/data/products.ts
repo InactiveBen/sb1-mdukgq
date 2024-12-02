@@ -6,7 +6,7 @@ export const products: Product[] = [
     name: 'Rainbow Barf Face',
     price: 999,
     robuxPrice: 300000,
-    robuxEnabled: true,
+    robuxEnabled: false,
     robuxLink: 'https://www.roblox.com/game-pass/12345678',
     image: '/images/4.png',
     rarity: 'rare',
