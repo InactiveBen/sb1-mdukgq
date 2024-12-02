@@ -9,6 +9,11 @@ export interface Product {
   featured?: boolean;
   isNew?: boolean;
   stripeLink?: string;
+  robuxLink?: string;
+  robuxEnabled?: boolean;
+  robuxPrice?: number;
+  placeId?: string;
   description?: string;
   tryOnLink?: string;
+  testLink?: string;
 }
