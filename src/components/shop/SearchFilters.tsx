@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 
 interface SearchFiltersProps {
   search: string;
@@ -65,16 +65,19 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         {/* Rarity Filter */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-neutral-300">Rarity</label>
-          <select
-            className="w-full h-12 rounded-lg border border-neutral-800 bg-neutral-900 px-4 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-            value={selectedRarity}
-            onChange={(e) => setSelectedRarity(e.target.value)}
-          >
-            <option value="all">All Rarities</option>
-            <option value="normal">Normal</option>
-            <option value="rare">Rare</option>
-            <option value="chaser">Chaser</option>
-          </select>
+          <div className="relative">
+            <select
+              className="w-full h-12 rounded-lg border border-neutral-800 bg-neutral-900 pl-4 pr-10 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-500"
+              value={selectedRarity}
+              onChange={(e) => setSelectedRarity(e.target.value)}
+            >
+              <option value="all">All Rarities</option>
+              <option value="normal">Normal</option>
+              <option value="rare">Rare</option>
+              <option value="chaser">Chaser</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" />
+          </div>
         </div>
       </div>
     </div>
