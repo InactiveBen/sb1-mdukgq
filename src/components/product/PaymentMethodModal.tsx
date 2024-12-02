@@ -10,6 +10,7 @@ interface PaymentMethodModalProps {
   onClose: () => void;
   onSelectMethod: (method: 'stripe' | 'robux') => void;
   product: Product;
+  resetToFirstStep?: boolean;
 }
 
 type Step = 'method' | 'profile' | 'bio' | 'friend-request' | 'email';
@@ -18,7 +19,8 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   isOpen,
   onClose,
   onSelectMethod,
-  product
+  product,
+  resetToFirstStep = false
 }) => {
   const [currentStep, setCurrentStep] = useState<Step>('method');
   const [selectedMethod, setSelectedMethod] = useState<'stripe' | 'robux' | null>(null);
@@ -38,7 +40,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   }, [isOpen]);
 
   const handleBack = () => {
-    if (currentStep === 'method') {
+    if (currentStep === 'method' || resetToFirstStep) {
       onClose();
       return;
     }
@@ -48,6 +50,11 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   };
 
   const handleMethodSelect = (method: 'stripe' | 'robux') => {
+    if ((method === 'stripe' && !product.stripeEnabled) || 
+        (method === 'robux' && !product.robuxEnabled)) {
+      return;
+    }
+
     setSelectedMethod(method);
     if (method === 'stripe') {
       setCurrentStep('email');
@@ -118,13 +125,22 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
               <div className="space-y-4">
                 <button
                   onClick={() => handleMethodSelect('stripe')}
-                  className="w-full flex items-center gap-4 p-4 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors text-left"
+                  disabled={!product.stripeEnabled}
+                  className="w-full flex items-center gap-4 p-4 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed relative"
                 >
+                  {!product.stripeEnabled && (
+                    <div className="absolute inset-0 bg-neutral-900/80 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                      <div className="flex items-center gap-2 text-neutral-400">
+                        <Lock className="w-4 h-4" />
+                        <span className="text-sm font-medium">Unavailable</span>
+                      </div>
+                    </div>
+                  )}
                   <CreditCard className="w-6 h-6 text-red-500" />
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-white">Pay with Card</span>
-                      <span className="text-xs text-green-500 bg-green-500/20 px-2 py-1 rounded-full" title="Get your order delivered via email within 5-10 minutes">5-10 min</span>
+                      <span className="text-xs text-green-500 bg-green-500/20 px-2 py-1 rounded-full">5-10 min</span>
                     </div>
                     <span className="text-sm text-neutral-400">Secure payment via Stripe</span>
                   </div>
@@ -147,7 +163,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-white">Pay with Robux</span>
-                      <span className="text-xs text-yellow-500 bg-yellow-500/20 px-2 py-1 rounded-full" title="Manual delivery within 24-48 hours">24-48h</span>
+                      <span className="text-xs text-yellow-500 bg-yellow-500/20 px-2 py-1 rounded-full">24-48h</span>
                     </div>
                     <span className="text-sm text-neutral-400">R${product.robuxPrice}</span>
                   </div>
