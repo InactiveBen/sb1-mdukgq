@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCart, ExternalLink } from 'lucide-react';
 import { Product } from '../../types';
+import { PaymentMethodModal } from '../product/PaymentMethodModal';
 
 interface ProductCardProps {
   product: Product;
@@ -15,21 +16,19 @@ const rarityColors = {
 };
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const [email, setEmail] = useState('');
-  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const handleBuyNow = () => {
-    setShowEmailPrompt(true);
+    setShowPaymentModal(true);
   };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email && product.stripeLink) {
-      const url = new URL(product.stripeLink);
-      url.searchParams.set('prefilled_email', email);
-      window.open(url.toString(), '_blank');
-      setShowEmailPrompt(false);
-      setEmail('');
+  const handlePaymentMethodSelect = (method: 'stripe' | 'robux') => {
+    setShowPaymentModal(false);
+    
+    if (method === 'stripe' && product.stripeLink) {
+      window.open(product.stripeLink, '_blank');
+    } else if (method === 'robux' && product.robuxLink) {
+      window.open(product.robuxLink, '_blank');
     }
   };
 
@@ -92,43 +91,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
       </motion.div>
 
-      {/* Email Prompt Modal */}
-      {showEmailPrompt && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-neutral-900 rounded-lg p-6 max-w-md w-full border border-neutral-800"
-          >
-            <h3 className="text-lg font-semibold text-white mb-4">Enter your email</h3>
-            <form onSubmit={handleEmailSubmit}>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-500 mb-4"
-                required
-              />
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowEmailPrompt(false)}
-                  className="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-4 py-2 text-sm font-semibold text-white hover:brightness-90"
-                >
-                  Continue to Checkout
-                </button>
-              </div>
-            </form>
-          </motion.div>
-        </div>
-      )}
+      <PaymentMethodModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onSelectMethod={handlePaymentMethodSelect}
+        product={product}
+      />
     </>
   );
 };
