@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Coins, Clock, X, Lock } from 'lucide-react';
+import { CreditCard, Coins, X, Lock } from 'lucide-react';
 import { Product } from '../../types';
-import { DeliveryInfo } from './DeliveryInfo';
 import { BioVerification } from './BioVerification';
 import { FriendRequestConfirmation } from './FriendRequestConfirmation';
 
@@ -13,7 +12,7 @@ interface PaymentMethodModalProps {
   product: Product;
 }
 
-type Step = 'method' | 'bio' | 'friend-request' | 'email';
+type Step = 'method' | 'profile' | 'bio' | 'friend-request' | 'email';
 
 export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   isOpen,
@@ -27,19 +26,25 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   const [profileLink, setProfileLink] = useState('');
   const [bioVerified, setBioVerified] = useState(false);
 
+  // Reset state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentStep('method');
+      setSelectedMethod(null);
+      setEmail('');
+      setProfileLink('');
+      setBioVerified(false);
+    }
+  }, [isOpen]);
+
   const handleBack = () => {
     if (currentStep === 'method') {
       onClose();
       return;
     }
 
-    if (currentStep === 'bio') {
-      setCurrentStep('method');
-    } else if (currentStep === 'friend-request') {
-      setCurrentStep('bio');
-    } else if (currentStep === 'email') {
-      setCurrentStep('method');
-    }
+    setCurrentStep('method');
+    setSelectedMethod(null);
   };
 
   const handleMethodSelect = (method: 'stripe' | 'robux') => {
@@ -47,6 +52,13 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
     if (method === 'stripe') {
       setCurrentStep('email');
     } else {
+      setCurrentStep('profile');
+    }
+  };
+
+  const handleProfileSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (profileLink) {
       setCurrentStep('bio');
     }
   };
@@ -106,82 +118,88 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
               <div className="space-y-4">
                 <button
                   onClick={() => handleMethodSelect('stripe')}
-                  className="w-full flex items-center gap-4 p-4 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors border border-neutral-700"
+                  className="w-full flex items-center gap-4 p-4 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors text-left"
                 >
-                  <CreditCard className="w-5 h-5 text-red-500" />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium text-white">Pay with Card</div>
-                    <div className="text-sm text-neutral-400">Secure payment via Stripe</div>
-                  </div>
-                  <div className="flex items-center gap-1 px-2 py-1 rounded bg-green-500/20 text-green-500 text-xs">
-                    <Clock className="w-3 h-3" />
-                    <span>5-10 min</span>
+                  <CreditCard className="w-6 h-6 text-red-500" />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-white">Pay with Card</span>
+                      <span className="text-xs text-green-500 bg-green-500/20 px-2 py-1 rounded-full" title="Get your order delivered via email within 5-10 minutes">5-10 min</span>
+                    </div>
+                    <span className="text-sm text-neutral-400">Secure payment via Stripe</span>
                   </div>
                 </button>
 
                 <button
                   onClick={() => handleMethodSelect('robux')}
                   disabled={!product.robuxEnabled}
-                  className="w-full flex items-center gap-4 p-4 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed relative"
+                  className="w-full flex items-center gap-4 p-4 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed relative"
                 >
-                  <Coins className="w-5 h-5 text-red-500" />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium text-white">Pay with Robux</div>
-                    <div className="text-sm text-neutral-400">R${product.robuxPrice}</div>
-                  </div>
-                  {product.robuxEnabled ? (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 text-xs">
-                      <Clock className="w-3 h-3" />
-                      <span>24-48h</span>
-                    </div>
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-900/80 rounded-lg backdrop-blur-sm">
+                  {!product.robuxEnabled && (
+                    <div className="absolute inset-0 bg-neutral-900/80 backdrop-blur-sm rounded-lg flex items-center justify-center">
                       <div className="flex items-center gap-2 text-neutral-400">
                         <Lock className="w-4 h-4" />
-                        <span className="text-sm">Unavailable</span>
+                        <span className="text-sm font-medium">Unavailable</span>
                       </div>
                     </div>
                   )}
+                  <Coins className="w-6 h-6 text-red-500" />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-white">Pay with Robux</span>
+                      <span className="text-xs text-yellow-500 bg-yellow-500/20 px-2 py-1 rounded-full" title="Manual delivery within 24-48 hours">24-48h</span>
+                    </div>
+                    <span className="text-sm text-neutral-400">R${product.robuxPrice}</span>
+                  </div>
                 </button>
               </div>
             </>
           )}
 
-          {currentStep === 'bio' && (
-            <>
+          {currentStep === 'profile' && (
+            <form onSubmit={handleProfileSubmit} className="space-y-6">
               <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-xl font-bold text-white">Verify Your Profile</h2>
-                  <p className="text-sm text-neutral-400">R${product.robuxPrice}</p>
-                </div>
-                <button onClick={handleBack} className="text-neutral-400 hover:text-white">
+                <h2 className="text-xl font-bold text-white">Enter Roblox Profile</h2>
+                <button type="button" onClick={handleBack} className="text-neutral-400 hover:text-white">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="space-y-6">
-                <DeliveryInfo />
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label htmlFor="profile" className="block text-sm font-medium text-neutral-300 mb-2">
                     Your Roblox Profile Link
                   </label>
                   <input
                     type="url"
+                    id="profile"
                     value={profileLink}
                     onChange={(e) => setProfileLink(e.target.value)}
-                    placeholder="https://www.roblox.com/users/..."
+                    placeholder="https://www.roblox.com/users/123456789/profile"
                     className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-500"
                     required
+                    pattern="https://www\.roblox\.com/users/\d+/profile"
                   />
+                  <p className="mt-1 text-xs text-neutral-400">
+                    Example: https://www.roblox.com/users/123456789/profile
+                  </p>
                 </div>
-                {profileLink && (
-                  <BioVerification
-                    profileLink={profileLink}
-                    onVerify={handleBioVerified}
-                  />
-                )}
+
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90"
+                >
+                  Continue
+                </button>
               </div>
-            </>
+            </form>
+          )}
+
+          {currentStep === 'bio' && (
+            <BioVerification
+              onVerify={handleBioVerified}
+              profileLink={profileLink}
+            />
           )}
 
           {currentStep === 'friend-request' && (
@@ -192,24 +210,22 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
           )}
 
           {currentStep === 'email' && (
-            <>
+            <form onSubmit={handleEmailSubmit} className="space-y-6">
               <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-xl font-bold text-white">Card Payment</h2>
-                  <p className="text-sm text-neutral-400">${product.price}</p>
-                </div>
-                <button onClick={handleBack} className="text-neutral-400 hover:text-white">
+                <h2 className="text-xl font-bold text-white">Enter Details</h2>
+                <button type="button" onClick={handleBack} className="text-neutral-400 hover:text-white">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <form onSubmit={handleEmailSubmit} className="space-y-6">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-neutral-300 mb-2">
                     Email Address
                   </label>
                   <input
                     type="email"
+                    id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
@@ -222,8 +238,8 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                   <input
                     type="checkbox"
                     id="terms"
-                    className="mt-1"
                     required
+                    className="mt-1"
                   />
                   <label htmlFor="terms" className="text-sm text-neutral-300">
                     I agree to the{' '}
@@ -239,8 +255,8 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                 >
                   Continue to Payment
                 </button>
-              </form>
-            </>
+              </div>
+            </form>
           )}
         </motion.div>
       </div>
