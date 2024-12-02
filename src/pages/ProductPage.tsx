@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ProductLayout } from '../components/product/layout/ProductLayout';
 import { ProductGallery } from '../components/product/ProductGallery';
@@ -7,7 +7,6 @@ import { ProductDescription } from '../components/product/details/ProductDescrip
 import { ProductDetails } from '../components/product/details/ProductDetails';
 import { ProductActions } from '../components/product/ProductActions';
 import { ProductTerms } from '../components/product/details/ProductTerms';
-import { EmailPromptModal } from '../components/product/EmailPromptModal';
 import { InvalidProductPage } from '../components/product/InvalidProductPage';
 import { products } from '../data/products';
 import { useScrollToTop } from '../hooks/useScrollToTop';
@@ -16,10 +15,6 @@ export const ProductPage: React.FC = () => {
   useScrollToTop();
   
   const { productId } = useParams();
-  const [email, setEmail] = useState('');
-  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'stripe' | 'robux' | null>(null);
-
   const product = products.find(p => p.id === productId);
 
   if (!product) {
@@ -27,26 +22,11 @@ export const ProductPage: React.FC = () => {
   }
 
   const handleBuyNow = (method: 'stripe' | 'robux') => {
-    setSelectedPaymentMethod(method);
-    setShowEmailPrompt(true);
-  };
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !selectedPaymentMethod) return;
-
-    if (selectedPaymentMethod === 'stripe' && product.stripeLink) {
-      const url = new URL(product.stripeLink);
-      url.searchParams.set('prefilled_email', email);
-      window.open(url.toString(), '_blank');
-    } else if (selectedPaymentMethod === 'robux') {
-      // Handle Robux payment flow
-      window.open(`https://www.roblox.com/game-pass/${product.id}`, '_blank');
+    if (method === 'stripe' && product.stripeLink) {
+      window.open(product.stripeLink, '_blank');
+    } else if (method === 'robux' && product.robuxLink) {
+      window.open(product.robuxLink, '_blank');
     }
-
-    setShowEmailPrompt(false);
-    setEmail('');
-    setSelectedPaymentMethod(null);
   };
 
   const leftSection = <ProductGallery product={product} />;
@@ -62,22 +42,9 @@ export const ProductPage: React.FC = () => {
   );
 
   return (
-    <>
-      <ProductLayout
-        leftSection={leftSection}
-        rightSection={rightSection}
-      />
-
-      <EmailPromptModal
-        isOpen={showEmailPrompt}
-        email={email}
-        setEmail={setEmail}
-        onSubmit={handleEmailSubmit}
-        onClose={() => {
-          setShowEmailPrompt(false);
-          setSelectedPaymentMethod(null);
-        }}
-      />
-    </>
+    <ProductLayout
+      leftSection={leftSection}
+      rightSection={rightSection}
+    />
   );
 };
