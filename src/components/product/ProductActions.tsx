@@ -33,7 +33,9 @@ export const ProductActions: React.FC<ProductActionsProps> = ({ product, onBuyNo
       >
         <div className="flex flex-col gap-4">
           <button
-            onClick={() => setShowPaymentModal(true)}
+            onClick={() => {
+              setShowPaymentModal(true);
+            }}
             className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90"
           >
             <ShoppingCart className="w-4 h-4" />
@@ -57,6 +59,7 @@ export const ProductActions: React.FC<ProductActionsProps> = ({ product, onBuyNo
         onClose={() => setShowPaymentModal(false)}
         onSelectMethod={handlePaymentMethodSelect}
         product={product}
+        resetToFirstStep={true}
       />
     </>
   );
