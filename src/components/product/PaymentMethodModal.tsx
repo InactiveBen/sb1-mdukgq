@@ -59,15 +59,19 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   };
 
   const handleFriendRequestConfirmed = () => {
-    if (selectedMethod) {
-      onSelectMethod(selectedMethod);
+    if (selectedMethod === 'robux' && product.robuxLink) {
+      window.open(product.robuxLink, '_blank');
+      onClose();
     }
   };
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedMethod) {
-      onSelectMethod(selectedMethod);
+    if (selectedMethod === 'stripe' && product.stripeLink) {
+      const url = new URL(product.stripeLink);
+      url.searchParams.set('prefilled_email', email);
+      window.open(url.toString(), '_blank');
+      onClose();
     }
   };
 
@@ -109,13 +113,9 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                     <div className="font-medium text-white">Pay with Card</div>
                     <div className="text-sm text-neutral-400">Secure payment via Stripe</div>
                   </div>
-                  <div className="group relative">
-                    <div className="flex items-center gap-1 px-2 py-1 rounded bg-green-500/20 text-green-500 text-xs">
-                      <Clock className="w-3 h-3" />
-                      <span className="group-hover:text-opacity-0 transition-all">5-10 min</span>
-                      <div className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded bg-neutral-800 text-neutral-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -top-8">
-RECOMMENDED                      </div>
-                    </div>
+                  <div className="flex items-center gap-1 px-2 py-1 rounded bg-green-500/20 text-green-500 text-xs">
+                    <Clock className="w-3 h-3" />
+                    <span>5-10 min</span>
                   </div>
                 </button>
 
@@ -130,13 +130,9 @@ RECOMMENDED                      </div>
                     <div className="text-sm text-neutral-400">R${product.robuxPrice}</div>
                   </div>
                   {product.robuxEnabled ? (
-                    <div className="group relative">
-                      <div className="flex items-center gap-1 px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 text-xs">
-                        <Clock className="w-3 h-3" />
-                        <span className="group-hover:text-opacity-0 transition-all">24-48h</span>
-                        <div className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded bg-neutral-800 text-neutral-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -top-8">
-Slower                       </div>
-                      </div>
+                    <div className="flex items-center gap-1 px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 text-xs">
+                      <Clock className="w-3 h-3" />
+                      <span>24-48h</span>
                     </div>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-neutral-900/80 rounded-lg backdrop-blur-sm">
