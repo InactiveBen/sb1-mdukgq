@@ -1,21 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Lock, LogIn, AlertCircle } from 'lucide-react';
+import { ShieldOff, AlertCircle, Mail, Ban, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
 import { PageBackground } from '../components/shared/PageBackground';
 
-export const AdminPage: React.FC = () => {
-  useEffect(() => {
-    toast.error(
-      'Authentication Required',
-      {
-        description: 'Please sign in to access the admin panel.',
-        duration: 535000,
-      }
-    );
-  }, []);
-
+export const ShutdownPage: React.FC = () => {
   return (
     <div className="relative isolate">
       <PageBackground />
@@ -29,20 +18,30 @@ export const AdminPage: React.FC = () => {
             className="max-w-md space-y-6"
           >
             <div className="text-center lg:text-left">
-              <Lock className="w-12 h-12 text-red-500 mx-auto lg:mx-0" />
-              <h1 className="mt-4 text-3xl font-bold text-white">Admin Access</h1>
+              <ShieldOff className="w-12 h-12 text-red-500 mx-auto lg:mx-0" />
+              <h1 className="mt-4 text-3xl font-bold text-white">Service Not Available</h1>
               <p className="mt-2 text-neutral-300">
-                Authentication required to access admin features
+                We regret to inform you that our services are not available in your region
               </p>
             </div>
 
             <div className="grid gap-4">
               <div className="bg-neutral-800/50 p-4 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                  <Ban className="w-5 h-5 text-red-500 flex-shrink-0" />
                   <div>
-                    <h3 className="font-medium text-white">Restricted Area</h3>
-                    <p className="text-sm text-neutral-300">Please sign in with your admin credentials</p>
+                    <h3 className="font-medium text-white">Regional Restrictions</h3>
+                    <p className="text-sm text-neutral-300">Due to regulatory requirements, we are unable to provide our services in your region</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-neutral-800/50 p-4 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Globe className="w-5 h-5 text-red-500 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-medium text-white">Permanent Restriction</h3>
+                    <p className="text-sm text-neutral-300">This restriction is permanent and we will not be able to offer services in your region in the future</p>
                   </div>
                 </div>
               </div>
@@ -59,28 +58,25 @@ export const AdminPage: React.FC = () => {
             className="max-w-md space-y-6"
           >
             <div className="text-center lg:text-left">
-              <LogIn className="w-12 h-12 text-red-500 mx-auto lg:mx-0" />
-              <h2 className="mt-4 text-2xl font-bold text-white">Sign In</h2>
+              <AlertCircle className="w-12 h-12 text-red-500 mx-auto lg:mx-0" />
+              <h2 className="mt-4 text-2xl font-bold text-white">Need Assistance?</h2>
               <p className="mt-2 text-neutral-300">
-                Access your admin dashboard
+                Our support team can help answer any questions about this restriction
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
-              <Link
-                to="/login"
+              <a
+                href="mailto:support@shopblox.gg"
                 className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500/40 shadow-[inset_0_0_12px_#ef4444a5] px-6 py-3 text-sm font-semibold text-white hover:brightness-90"
               >
-                <LogIn className="w-5 h-5" />
-                Sign In
-              </Link>
+                <Mail className="w-5 h-5" />
+                Contact Support
+              </a>
 
               <div className="text-sm text-center lg:text-left text-neutral-400">
                 <p>
-                  Need help?{' '}
-                  <Link to="/support" className="text-red-500 hover:text-red-400">
-                    Contact support
-                  </Link>
+                  We sincerely apologize for any inconvenience this may cause. Thank you for your understanding.
                 </p>
               </div>
             </div>
