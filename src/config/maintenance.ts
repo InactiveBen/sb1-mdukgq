@@ -1,5 +1,5 @@
 export const maintenanceConfig = {
-  enabled: false, // Toggle maintenance mode (true = enabled, false = disabled)
+  enabled: true, // Toggle maintenance mode (true = enabled, false = disabled)
   
   // List of paths allowed during maintenance mode
   allowedPaths: [
