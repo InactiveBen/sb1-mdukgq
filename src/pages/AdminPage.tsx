@@ -4,7 +4,7 @@ import { ShieldOff, AlertCircle, Mail, Ban, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageBackground } from '../components/shared/PageBackground';
 
-export const ShutdownPage: React.FC = () => {
+export const AdminPage: React.FC = () => {
   return (
     <div className="relative isolate">
       <PageBackground />
